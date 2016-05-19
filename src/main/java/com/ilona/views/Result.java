@@ -5,15 +5,16 @@
  */
 package com.ilona.views;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+
+import static com.ilona.views.Encoder.scale;
 
 /**
- *
  * @author Alex
  */
 public class Result extends javax.swing.JFrame {
@@ -44,10 +45,15 @@ public class Result extends javax.swing.JFrame {
 
         jToolBar1.setRollover(true);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("DecodeResult");
 
         jButton1.setText("<html><center>Открыть описание<br>ошибок</center></html>");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("ОК");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -67,41 +73,49 @@ public class Result extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap())
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jButton2)
+                                                .addGap(50, 50, 50))))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 193, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 353, Short.MAX_VALUE)
+                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jButton2))
+                                        .addComponent(jScrollPane1))
+                                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-        private static ScrollablePicture picture;
+    private static ScrollablePicture picture;
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -127,23 +141,46 @@ public class Result extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Result result=new Result();
-               
-           File file=new File("G:\\sample.bmp");
-            ImageIcon ii = null;
-            try {
-                ii = new ImageIcon(ImageIO.read(file));
-            } catch (IOException ex) {
-                Logger.getLogger(Coder.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            picture = new ScrollablePicture(ii, 100);
-           result. jScrollPane1.setViewportView(picture);
-           result. jScrollPane1.setVisible(true);
-             result.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            Result result = new Result();
+            String pathToImage = "G:\\sample.bmp";
+            result.setImage(pathToImage);
         });
+    }
+
+    public void setImage(String pathToImage) {
+        if (pathToImage.contains(".auto") || pathToImage.contains(".manually")) {
+            pathToImage = pathToImage.replace(".decoded", "") + ".decoded";
+        }
+        File file = new File(pathToImage);
+        ImageIcon ii = null;
+        try {
+            ii = new ImageIcon(scale(
+                    ImageIO.read(file),
+                    0,
+                    jScrollPane1.getWidth(),
+                    jScrollPane1.getHeight(),
+                    1.0, 1.0));
+        } catch (IOException ex) {
+            Logger.getLogger(Encoder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        picture = new ScrollablePicture(ii, 100);
+        this.jScrollPane1.setViewportView(picture);
+        this.jScrollPane1.setVisible(true);
+        this.setVisible(true);
+    }
+
+    public void setText(String pathToFile) throws IOException {
+        File file = new File(pathToFile);
+        JTextArea textArea = new JTextArea();
+        textArea.setText(com.ilona.coding.file.FileReader.getEncodedFileAsStringArrayView(pathToFile));
+        this.jScrollPane1.setViewportView(textArea);
+        this.jScrollPane1.setVisible(true);
+        this.setVisible(true);
+    }
+
+    public void setButtonVisibility(boolean b) {
+        jButton1.setVisible(b);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -154,5 +191,14 @@ public class Result extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
+
+    public void setTextDecoded(String decodedFile) {
+        File file = new File(decodedFile);
+        JTextArea textArea = new JTextArea();
+        textArea.setText(com.ilona.coding.file.FileReader.getDecodedFileAsString(decodedFile));
+        this.jScrollPane1.setViewportView(textArea);
+        this.jScrollPane1.setVisible(true);
+        this.setVisible(true);
+    }
     // End of variables declaration//GEN-END:variables
 }
