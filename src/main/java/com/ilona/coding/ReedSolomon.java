@@ -6,6 +6,9 @@
 
 package com.ilona.coding;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Reed-Solomon Coding over 8-bit values.
  */
@@ -213,10 +216,11 @@ public class ReedSolomon {
      * If any shards are missing (based on the flags in shardsPresent),
      * the data in those shards is recomputed and filled in.
      */
-    public void decodeMissing(byte[][] shards,
-                              boolean[] shardPresent,
-                              final int offset,
-                              final int byteCount) {
+    public List<Triple<Integer, Byte, Byte>> decodeMissing(byte[][] shards,
+                                                           boolean[] shardPresent,
+                                                           final int offset,
+                                                           final int byteCount) {
+        List<Triple<Integer, Byte, Byte>> list = new LinkedList<>();
         // Check arguments.
         checkBuffersAndSizes(shards, offset, byteCount);
 
@@ -226,12 +230,13 @@ public class ReedSolomon {
         for (int i = 0; i < totalShardCount; i++) {
             if (shardPresent[i]) {
                 numberPresent += 1;
-            }
+            } else
+                list.add(new Triple<>(i, shards[i][0], null));
         }
         if (numberPresent == totalShardCount) {
             // Cool.  All of the shards data data.  We don't
             // need to do anything.
-            return;
+            return list;
         }
 
         // More complete sanity check
@@ -257,6 +262,7 @@ public class ReedSolomon {
         // the missing data shards.
         Matrix subMatrix = new Matrix(dataShardCount, dataShardCount);
         byte[][] subShards = new byte[dataShardCount][];
+
         {
             int subMatrixRow = 0;
             for (int matrixRow = 0; matrixRow < totalShardCount && subMatrixRow < dataShardCount; matrixRow++) {
@@ -285,13 +291,18 @@ public class ReedSolomon {
         byte[][] outputs = new byte[parityShardCount][];
         byte[][] matrixRows = new byte[parityShardCount][];
         int outputCount = 0;
-        for (int iShard = 0; iShard < dataShardCount; iShard++) {
+        for (
+                int iShard = 0;
+                iShard < dataShardCount; iShard++)
+
+        {
             if (!shardPresent[iShard]) {
                 outputs[outputCount] = shards[iShard];
                 matrixRows[outputCount] = dataDecodeMatrix.getRow(iShard);
                 outputCount += 1;
             }
         }
+
         codingLoop.codeSomeShards(
                 matrixRows,
                 subShards, dataShardCount,
@@ -305,18 +316,27 @@ public class ReedSolomon {
         // any that we just calculated.  The output is whichever of the
         // data shards were missing.
         outputCount = 0;
-        for (int iShard = dataShardCount; iShard < totalShardCount; iShard++) {
+        for (
+                int iShard = dataShardCount;
+                iShard < totalShardCount; iShard++)
+
+        {
             if (!shardPresent[iShard]) {
                 outputs[outputCount] = shards[iShard];
                 matrixRows[outputCount] = parityRows[iShard - dataShardCount];
                 outputCount += 1;
             }
         }
+
         codingLoop.codeSomeShards(
                 matrixRows,
                 shards, dataShardCount,
                 outputs, outputCount,
                 offset, byteCount);
+        for (Triple<Integer, Byte, Byte> triple : list) {
+            if (shards[triple.getK()][0] != triple.getV()) triple.setL(shards[triple.getK()][0]);
+        }
+        return list;
     }
 
     /**

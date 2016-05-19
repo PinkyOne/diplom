@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Command-line program that decodes a file using Reed-Solomon 4+2.
@@ -34,7 +36,7 @@ public class SampleDecoder {
         decode("G:/sample.bmp");
     }
 
-    public static byte[] decode(byte[] input, boolean[] bytePresent) {
+    public static byte[] decode(byte[] input, boolean[] bytePresent, int index) {
         byte[] output = new byte[input.length];
         // Use Reed-Solomon to fill in the missing shards
         ReedSolomon reedSolomon = ReedSolomon.create(DATA_SHARDS, PARITY_SHARDS);
@@ -45,7 +47,9 @@ public class SampleDecoder {
         for (int i = 0; i < bytePresent.length; i++) {
             bytePresent[i] = !bytePresent[i];
         }
-        reedSolomon.decodeMissing(inputToBidim, bytePresent, 0, 1);
+        erasuresList.add(new javafx.util.Pair<>(
+                index,
+                reedSolomon.decodeMissing(inputToBidim, bytePresent, 0, 1)));
         for (int i = 0; i < input.length; i++) {
             output[i] = inputToBidim[i][0];
         }
@@ -55,7 +59,7 @@ public class SampleDecoder {
     public static byte[][] decode(Pair pair) {
         byte[][] output = new byte[pair.getKey().length][TOTAL_SHARDS];
         for (int i = 0; i < pair.getKey().length; i++) {
-            output[i] = decode(pair.getKey()[i], pair.getValue()[i]);
+            output[i] = decode(pair.getKey()[i], pair.getValue()[i], i);
         }
         return output;
     }
@@ -70,13 +74,16 @@ public class SampleDecoder {
         return shards;
     }
 
+    public static List<javafx.util.Pair<Integer, List<Triple<Integer, Byte, Byte>>>> erasuresList;
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void decode(String path) throws IOException {
+        erasuresList = new LinkedList<>();
         byte[][] shards;
         final File originalFile = new File(path.replace(".encoded", ""));
         if (!originalFile.exists()) {
             System.out.println("Cannot read input file: " + originalFile);
-          //  return;
+            //  return;
         }
         if (path.contains(".auto") || path.contains(".manually")) {
             Pair pair = com.ilona.coding.file.FileReader.readVectors(path);
@@ -154,5 +161,23 @@ public class SampleDecoder {
         out.close();
         System.out.println("Wrote1 " + decodedFile);
 
+    }
+
+    public static String getInfoAboutErrors() {
+        StringBuilder sb = new StringBuilder();
+        for (javafx.util.Pair<Integer, List<Triple<Integer, Byte, Byte>>> pair : erasuresList) {
+            for (Triple<Integer, Byte, Byte> triple : pair.getValue()) {
+                if (triple.getL() != null) sb.append("В \"").append(pair.getKey())
+                        .append("\" векторе в \"").append(triple.getK())
+                        .append("\" символе была исправлена ошибка: \"").append(Byte.toUnsignedInt(triple.getV()))
+                        .append("\" заменена на \"").append(Byte.toUnsignedInt(triple.getL())).append("\";\n");
+                else sb.append("В \"").append(pair.getKey())
+                        .append("\" векторе в \"").append(triple.getK())
+                        .append("\" символе не была исправлена ошибка: \"").append(Byte.toUnsignedInt(triple.getV()))
+                        .append("\";\n");
+
+            }
+        }
+        return sb.toString();
     }
 }

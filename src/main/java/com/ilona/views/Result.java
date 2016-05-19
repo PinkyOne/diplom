@@ -5,6 +5,8 @@
  */
 package com.ilona.views;
 
+import com.ilona.coding.SampleDecoder;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
@@ -108,7 +110,9 @@ public class Result extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+       DecodedErrorsInfo decodedErrorsInfo=new DecodedErrorsInfo();
+        decodedErrorsInfo.setText(SampleDecoder.getInfoAboutErrors());
+        decodedErrorsInfo.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
