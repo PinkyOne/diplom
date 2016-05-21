@@ -120,7 +120,7 @@ public class SampleEncoder {
         }
 
         long after = System.currentTimeMillis();
-        System.out.println("file coding time " + String.valueOf((after - before) / 1000) + "s"
+        System.err.println("file coding time " + String.valueOf((after - before) / 1000) + "s"
                 + String.valueOf((after - before) % 1000) + "ms");
 
     }

@@ -119,8 +119,10 @@ public class Decoder extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-
+            long startTime = System.currentTimeMillis();
             SampleDecoder.decode(pathToFile);
+            long finishTime = System.currentTimeMillis();
+            System.err.println("Decoding time:" + (finishTime-startTime)/1000);
             if (pathToFile.contains("jpg")
                     || pathToFile.contains("bmp")
                     || pathToFile.contains("png")) {

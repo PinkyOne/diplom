@@ -82,7 +82,7 @@ public class SampleDecoder {
         byte[][] shards;
         final File originalFile = new File(path.replace(".encoded", ""));
         if (!originalFile.exists()) {
-            System.out.println("Cannot read input file: " + originalFile);
+         //   System.out.println("Cannot read input file: " + originalFile);
             //  return;
         }
         if (path.contains(".auto") || path.contains(".manually")) {
