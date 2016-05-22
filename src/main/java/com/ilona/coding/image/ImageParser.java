@@ -40,8 +40,6 @@ public class ImageParser {
                 imageBytes[y][x * 3] = (byte) red;
                 imageBytes[y][x * 3 + 1] = (byte) green;
                 imageBytes[y][x * 3 + 2] = (byte) blue;
-                System.err.println(Integer.toHexString(color));
-                System.err.println(Integer.toBinaryString(color));
             }
         }
         for (int i = 0; i < imageBytes.length; i++) {
@@ -71,11 +69,8 @@ public class ImageParser {
                 int green = imageBytes[y][x*3+1];
                 int red = imageBytes[y][x*3];
                 color = getIntFromColor(red, green, blue);
-                System.err.println(Integer.toHexString(color));
-                System.err.println(Integer.toBinaryString(color));
                 bi.setRGB(x, y, color);
             }
-            System.err.println(y);
         }
         return bi;
     }

@@ -84,7 +84,6 @@ public class SampleEncoder {
         }
         SampleEncoder.shardSize = shardSize;
 
-        long before = System.currentTimeMillis();
         // Make the buffers to hold the shards.
         byte[][] shards = new byte[TOTAL_SHARDS][shardSize];
 
@@ -96,7 +95,10 @@ public class SampleEncoder {
 
         // Use Reed-Solomon to calculate the parity.
         ReedSolomon reedSolomon = new ReedSolomon(DATA_SHARDS, PARITY_SHARDS, new OutputInputByteTableCodingLoop());
+        long before = System.nanoTime();
+
         reedSolomon.encodeParity(shards, 0, shardSize);
+        long after = System.nanoTime();
 
         // Write out the resulting files.
         File encodedFile = new File(inputFile.getParentFile(),
@@ -116,12 +118,10 @@ public class SampleEncoder {
             out = new FileOutputStream(encodedFile, true);
             out.write(shards[i]);
             out.close();
-            System.out.println("wrote " + outputFile);
+          //  System.out.println("wrote " + outputFile);
         }
 
-        long after = System.currentTimeMillis();
-        System.err.println("file coding time " + String.valueOf((after - before) / 1000) + "s"
-                + String.valueOf((after - before) % 1000) + "ms");
+       System.out.println(" new alg coding time: " + String.valueOf((after - before)));
 
     }
 

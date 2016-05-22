@@ -1,6 +1,8 @@
 package com.backblaze.erasure;
 
 import com.ilona.Pair;
+import com.ilona.coding.OriginalEncoder;
+import com.ilona.coding.SampleEncoder;
 import com.ilona.coding.encoder.Encoder;
 import com.ilona.coding.file.ErrorMaker;
 import com.ilona.coding.file.FileReader;
@@ -10,6 +12,7 @@ import com.ilona.views.MakeErrors;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -37,7 +40,36 @@ public class MyEncoderTest {
     }
 
     @Test
+    public void newMeta() throws IOException {
+        File bmpDir = new File("G:/bmps");
+        for(int i =0;i<100;i++){
+            OriginalEncoder.main("G:/red.bmp");
+        }
+        for (File bmp : bmpDir.listFiles()) {
+            if (bmp.getName().split("\\.").length > 2)
+                continue;
+
+
+            long before = System.nanoTime();
+            OriginalEncoder.main(bmp.getAbsolutePath());
+            long after = System.nanoTime();
+
+            System.out.print(bmp.getName().replace(".bmp", "") + "x"
+                    + bmp.getName().replace(".bmp", "")+"file size: " +bmp.length()/1024+ "Kb | simple coding time: "
+                    + (after - before));
+
+            before = System.nanoTime();
+            SampleEncoder.encode(bmp.getAbsolutePath());
+            after = System.nanoTime();
+
+            System.err.flush();
+           // System.out.println(" new alg coding time: " + (after - before));
+        }
+    }
+
+    @Test
     public void parseImageToRGBByteArray() {
+
         byte[] inputFileBytes = ImageParser.parse("G:/red.bmp");
         for (int i = 4; i < inputFileBytes.length; i++) {
             Assert.assertEquals("index = " + i, (i - 4) % 3 == 0 ? -1 : 0, inputFileBytes[i]);

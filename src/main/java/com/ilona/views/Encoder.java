@@ -119,6 +119,10 @@ public class Encoder extends javax.swing.JFrame {
         if (ret == JFileChooser.APPROVE_OPTION) {
             File file = jFileChooser1.getSelectedFile();
             pathToFile = file.getAbsolutePath();
+          if(pathToFile.contains(".txt")){
+              setTextDecoded(pathToFile);
+              return;
+          }
             ImageIcon ii = null;
             try {
                 String name = file.getName();
@@ -190,7 +194,14 @@ public class Encoder extends javax.swing.JFrame {
             }
         });
     }
-
+    public void setTextDecoded(String decodedFile) {
+        File file = new File(decodedFile);
+        JTextArea textArea = new JTextArea();
+        textArea.setText(com.ilona.coding.file.FileReader.getDecodedFileAsString(decodedFile));
+        this.jScrollPane1.setViewportView(textArea);
+        this.jScrollPane1.setVisible(true);
+        this.setVisible(true);
+    }
     /**
      * scale image
      *

@@ -104,8 +104,8 @@ public class SampleEncoder2 {
             }
         }
         long after = System.currentTimeMillis();
-        System.out.println("file coding time " + String.valueOf((after - before) / 1000) + "s"
-                + String.valueOf((after - before) % 1000) + "ms");
+      //  System.out.println("file coding time " + String.valueOf((after - before) / 1000) + "s"
+             //   + String.valueOf((after - before) % 1000) + "ms");
 
     }
 }
