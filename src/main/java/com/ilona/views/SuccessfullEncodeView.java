@@ -6,6 +6,11 @@
 package com.ilona.views;
 
 import com.ilona.Pair;
+import com.ilona.coding.SampleDecoder;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Alex
@@ -115,7 +120,7 @@ public class SuccessfullEncodeView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public static String pathToFile;
+    private String pathToFile;
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Result result = new Result();
@@ -129,14 +134,44 @@ public class SuccessfullEncodeView extends javax.swing.JFrame {
         result.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private enum TypeOfRSCode {
+        CLEAR, MANUALLY, AUTO;
+    }
+
+    private TypeOfRSCode type = TypeOfRSCode.CLEAR;
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new Decoder().setVisible(true);
+        try {
+            long startTime = System.currentTimeMillis();
+            if (type == TypeOfRSCode.CLEAR) pathToFile = Encoder.pathToFile + ".encoded";
+            SampleDecoder.decode(pathToFile);
+            long finishTime = System.currentTimeMillis();
+            System.err.println("Decoding time:" + (finishTime - startTime) / 1000);
+            if (pathToFile.contains("jpg")
+                    || pathToFile.contains("bmp")
+                    || pathToFile.contains("png")) {
+                if (pathToFile.contains("bmp")) {
+                    Result result = new Result();
+                    result.setImage(pathToFile.replace("encoded", "decoded"));
+                    return;
+                }
+                Result result = new Result();
+                result.setImage(pathToFile.replace("encoded", "decoded"));
+            } else {
+                Result result = new Result();
+                result.setTextDecoded(pathToFile.replace("encoded", "decoded"));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Decoder.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         MakeErrorsManually manErrView = new MakeErrorsManually();
         try {
             manErrView.setText(Encoder.pathToFile + ".encoded");
+            pathToFile = Encoder.pathToFile + ".encoded.manually";
+            type = TypeOfRSCode.MANUALLY;
         } catch (Exception e) {
         }
         manErrView.setVisible(true);
@@ -147,6 +182,8 @@ public class SuccessfullEncodeView extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         MakeErrors makeErrors = new MakeErrors();
         makeErrors.setVisible(true);
+        pathToFile = Encoder.pathToFile + ".encoded.auto";
+        type = TypeOfRSCode.AUTO;
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
