@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="974.2233333333334" y="966.5">com.ilona.coding.image.ImageParser</node>
+    <node x="0.0" y="433.0">com.ilona.coding.Matrix</node>
+    <node x="872.2233333333334" y="577.0">com.ilona.coding.Triple</node>
+    <node x="592.7233333333334" y="934.0">com.ilona.coding.file.FileReader</node>
+    <node x="188.72333333333341" y="867.0">com.ilona.coding.ReedSolomon</node>
+    <node x="522.2500000000001" y="1602.0">com.ilona.coding.SampleEncoder</node>
+    <node x="761.2233333333334" y="1257.0">com.ilona.coding.SampleDecoder</node>
+    <node x="106.25" y="0.0">com.ilona.coding.Galois</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.ilona.coding.SampleDecoder" target="com.ilona.coding.Triple">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.SampleEncoder" target="com.ilona.coding.ReedSolomon">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.ReedSolomon" target="com.ilona.coding.Galois">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.ReedSolomon" target="com.ilona.coding.Matrix">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.SampleDecoder" target="com.ilona.coding.image.ImageParser">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.file.FileReader" target="com.ilona.coding.SampleEncoder">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.SampleEncoder" target="com.ilona.coding.image.ImageParser">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.ReedSolomon" target="com.ilona.coding.Triple">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.SampleDecoder" target="com.ilona.coding.file.FileReader">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.SampleDecoder" target="com.ilona.coding.ReedSolomon">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.SampleEncoder" target="com.ilona.coding.SampleDecoder">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.ilona.coding.Matrix" target="com.ilona.coding.Galois">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.1498665242925787" x="313.0902632678646" y="117.50188048474718" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

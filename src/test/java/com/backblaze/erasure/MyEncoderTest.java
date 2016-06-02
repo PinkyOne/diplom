@@ -2,6 +2,7 @@ package com.backblaze.erasure;
 
 import com.ilona.Pair;
 import com.ilona.coding.OriginalEncoder;
+import com.ilona.coding.SampleDecoder;
 import com.ilona.coding.SampleEncoder;
 import com.ilona.coding.encoder.Encoder;
 import com.ilona.coding.file.ErrorMaker;
@@ -14,6 +15,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class MyEncoderTest {
@@ -42,7 +45,7 @@ public class MyEncoderTest {
     @Test
     public void newMeta() throws IOException {
         File bmpDir = new File("G:/bmps");
-        for(int i =0;i<100;i++){
+        for (int i = 0; i < 100; i++) {
             OriginalEncoder.main("G:/red.bmp");
         }
         for (File bmp : bmpDir.listFiles()) {
@@ -55,7 +58,7 @@ public class MyEncoderTest {
             long after = System.nanoTime();
 
             System.out.print(bmp.getName().replace(".bmp", "") + "x"
-                    + bmp.getName().replace(".bmp", "")+"file size: " +bmp.length()/1024+ "Kb | simple coding time: "
+                    + bmp.getName().replace(".bmp", "") + "file size: " + bmp.length() / 1024 + "Kb | simple coding time: "
                     + (after - before));
 
             before = System.nanoTime();
@@ -63,8 +66,85 @@ public class MyEncoderTest {
             after = System.nanoTime();
 
             System.err.flush();
-           // System.out.println(" new alg coding time: " + (after - before));
+            // System.out.println(" new alg coding time: " + (after - before));
         }
+    }
+
+    String pathToFile = "G:/rest.jpg";
+
+    @Test
+    public void restErasures() throws IOException {
+        String type = "Групповые";
+        int count, t = 30, k = 195;
+        SampleEncoder.refreshShardCount(k, t);
+        SampleEncoder.encode(pathToFile);
+        count = 2 * t;
+        String orig = "";
+        orig = new String(Files.readAllBytes(Paths.get(pathToFile)));
+        int diff;
+        String decoded = "";
+
+//        FileReader.saveVectors(
+//                ErrorMaker.makeErrors(FileReader.getVectors(pathToFile + ".encoded"), 100, type),
+//                pathToFile + ".encoded.auto");
+//        SampleDecoder.decode(pathToFile + ".encoded.auto", type + "_count_" + 100 + ".txt");
+//        decoded = new String(Files.readAllBytes(Paths.get("G:/" + type + "_count_" + 100 + ".txt")));
+//        diff = StringUtils.getLevenshteinDistance(orig, decoded);
+//        System.out.println("diff:"+type+"error count: "+100+"Levenshtein distance:"+diff);
+//
+//        FileReader.saveVectors(
+//                ErrorMaker.makeErrors(FileReader.getVectors(pathToFile + ".encoded"), 1000, type),
+//                pathToFile + ".encoded.auto");
+//        SampleDecoder.decode(pathToFile + ".encoded.auto", type + "_count_" + 1000 + ".txt");
+//        decoded = new String(Files.readAllBytes(Paths.get("G:/" + type + "_count_" + 1000 + ".txt")));
+//        diff = StringUtils.getLevenshteinDistance(orig, decoded);
+//        System.out.println("diff:"+type+"error count: "+1000+"Levenshtein distance:"+diff);
+//
+//        FileReader.saveVectors(
+//                ErrorMaker.makeErrors(FileReader.getVectors(pathToFile + ".encoded"), 2000, type),
+//                pathToFile + ".encoded.auto");
+//        SampleDecoder.decode(pathToFile + ".encoded.auto", type + "_count_" + 2000 + ".txt");
+//        decoded = new String(Files.readAllBytes(Paths.get("G:/" + type + "_count_" + 2000 + ".txt")));
+//        diff = StringUtils.getLevenshteinDistance(orig, decoded);
+//        System.out.println("diff:"+type+"error count: "+2000+"Levenshtein distance:"+diff);
+//
+//        FileReader.saveVectors(
+//                ErrorMaker.makeErrors(FileReader.getVectors(pathToFile + ".encoded"), 100, type),
+//                pathToFile + ".encoded.auto");
+//        SampleDecoder.decode(pathToFile + ".encoded.auto", type + "_count_" + 100 + ".txt");
+//        decoded = new String(Files.readAllBytes(Paths.get("G:/" + type + "_count_" + 100 + ".txt")));
+//        diff = StringUtils.getLevenshteinDistance(orig, decoded);
+//        System.out.println("diff:"+type+"error count: "+100+"Levenshtein distance:"+diff);
+//
+//        FileReader.saveVectors(
+//                ErrorMaker.makeErrors(FileReader.getVectors(pathToFile + ".encoded"), 1000, type),
+//                pathToFile + ".encoded.auto");
+//        SampleDecoder.decode(pathToFile + ".encoded.auto", type + "_count_" + 1000 + ".txt");
+//        decoded = new String(Files.readAllBytes(Paths.get("G:/" + type + "_count_" + 1000 + ".txt")));
+//        diff = StringUtils.getLevenshteinDistance(orig, decoded);
+//        System.out.println("diff:"+type+"error count: "+1000+"Levenshtein distance:"+diff);
+//
+//        FileReader.saveVectors(
+//                ErrorMaker.makeErrors(FileReader.getVectors(pathToFile + ".encoded"), 2000, type),
+//                pathToFile + ".encoded.auto");
+//        SampleDecoder.decode(pathToFile + ".encoded.auto", type + "_count_" + 2000 + ".txt");
+//        decoded = new String(Files.readAllBytes(Paths.get("G:/" + type + "_count_" + 2000 + ".txt")));
+//        diff = StringUtils.getLevenshteinDistance(orig, decoded);
+//        System.out.println("diff:"+type+"error count: "+2000+"Levenshtein distance:"+diff);
+//        for (int i = 3*t; i < 8*t; i+=t) {
+//            FileReader.saveVectors(
+//                    ErrorMaker.makeErrors(FileReader.getVectors("G:/rest.jpg.encoded"), i, type),
+//                    pathToFile + ".encoded.auto");
+//            SampleDecoder.decode(pathToFile + ".encoded.auto",type+"_count_"+i+".jpg");
+//        }
+        type = "Все Равно";
+
+//        for (int i = 3*t; i < 8*t; i+=t) {
+            FileReader.saveVectors(
+                    ErrorMaker.makeErrors(FileReader.getVectors("G:/rest.jpg.encoded"), 120, type),
+                    pathToFile + ".encoded.auto");
+            SampleDecoder.decode(pathToFile + ".encoded.auto",type+"_count_"+120+".jpg");
+//        }
     }
 
     @Test
@@ -77,7 +157,7 @@ public class MyEncoderTest {
     }
 
     @Test
-    public void testErrorMake() {
+    public void restErrorMake() {
         byte[] array = new byte[]
                 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                         0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
@@ -95,7 +175,7 @@ public class MyEncoderTest {
     }
 
     @Test
-    public void testErrorMake1() {
+    public void restErrorMake1() {
         byte[] array = new byte[]
                 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                         0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
@@ -112,7 +192,7 @@ public class MyEncoderTest {
     }
 
     @Test
-    public void testErrorMake2() {
+    public void restErrorMake2() {
         Pair pair = null;
         for (int i = 0; i < 10000; i++) {
 
@@ -146,7 +226,7 @@ public class MyEncoderTest {
     }
 
     @Test
-    public void testDivide() {
+    public void restDivide() {
         byte[] array = new byte[]
                 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                         0, 1, 2, 3, 4, 5, 6, 7, 8, 9,

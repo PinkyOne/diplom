@@ -36,7 +36,7 @@ public class SampleEncoder {
     private static int shardSize;
 
     public static void main(String[] strings) throws IOException {
-        encode("G:/sample.bmp");
+        encode("G:/50.bmp");
     }
 
     public static void encode(String pathToFile) throws IOException {
@@ -111,11 +111,11 @@ public class SampleEncoder {
                     inputFile.getParentFile(),
                     inputFile.getName() + "." + i);
 
-            OutputStream out = new FileOutputStream(outputFile);
-            out.write(shards[i]);
-            out.close();
+//            OutputStream out = new FileOutputStream(outputFile);
+//            out.write(shards[i]);
+//            out.close();
 
-            out = new FileOutputStream(encodedFile, true);
+            OutputStream out = new FileOutputStream(encodedFile, true);
             out.write(shards[i]);
             out.close();
           //  System.out.println("wrote " + outputFile);
